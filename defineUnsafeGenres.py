@@ -1,11 +1,12 @@
 from transformers import pipeline
-mod = pipeline("text-classification", model="unitary/unbiased-toxic-roberta", truncation=True)
+from visualise_topics import dump_topics, plot_unsafe_bar
 
 def is_unsafe(label):
     return label["label"] in {"toxic", "hate", "sexual_explicit", "violent"}
 
 def unsafeGenres(GENRES, topic_models):
     unsafe_share = {}
+    mod = pipeline("text-classification", model="unitary/unbiased-toxic-roberta", truncation=True)
     for g in GENRES:
         model, topics, probs = topic_models[g]
         unsafe = 0
@@ -23,3 +24,9 @@ def unsafeGenres(GENRES, topic_models):
     print("\nfraction of topics flagged unsafe:")
     for g,v in unsafe_share.items():
         print(f"{g:10s}  {v:.2%}")
+
+    for g in GENRES:
+        model, _, _ = topic_models[g]
+        dump_topics(model, out_path=f"topics_{g}.txt")
+
+    plot_unsafe_bar(unsafe_share, out_png="unsafe_share.png")

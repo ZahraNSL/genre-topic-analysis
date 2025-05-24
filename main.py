@@ -14,7 +14,7 @@ SUBSET_DIR = Path("genre_subsets")
 SUBSET_DIR.mkdir(exist_ok=True)
 
 
-#streamData(GENRES, SUBSET_DIR, MAX_DOCS_PER_GENRE,RAW );
+streamData(GENRES, SUBSET_DIR, MAX_DOCS_PER_GENRE,RAW );
 topic_models = BERTopicModel(GENRES, SUBSET_DIR);
 averagedTopicProbabilities(topic_models,GENRES);
 unsafeGenres(GENRES, topic_models);
